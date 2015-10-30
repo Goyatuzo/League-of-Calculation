@@ -33,3 +33,6 @@ node_modules
 
 # Intellij
 .idea/
+
+# Make sure API key isn't released.
+public/resources/api-key.txt
