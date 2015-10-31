@@ -13,7 +13,7 @@ function ChampionData() {
     /**
      * Load the api key from the file called api-key.txt under public/resources.
      */
-    this.api_key = fs.readFileSync('public/resources/api-key.txt');
+    this.api_key = fs.readFileSync('RiotAPI/api-key.txt');
 
     /**
      * Obtain the data for all of the champions.
