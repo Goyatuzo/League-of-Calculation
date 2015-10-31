@@ -5,7 +5,7 @@
 "use strict";
 
 var chai = require('chai');
-var ChampionData = require('../RiotAPI/ChampionData.js');
+var ChampionData = require('../RiotAPI/champion-data.js');
 
 var champion = new ChampionData();
 
@@ -13,13 +13,13 @@ var expect = chai.expect;
 var should = chai.should();
 
 /**
- * Test ChampionData.js
+ * Test champion-data.js
  */
 describe("Champion identification tests.", function() {
     "use strict";
     it('Retrieve JSON data of champions.', function(done) {
         champion.getIdentifiers(function(championList) {
-            expect(championList).to.not.equal('undefined');
+            expect(championList).to.not.equal(undefined);
             // Once the data has been retrieved and it's not null, the function is completed.
             done();
         });
