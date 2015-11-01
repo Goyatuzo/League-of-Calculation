@@ -46,7 +46,7 @@ describe("Champion Data", function() {
  * @param done
  */
 function imageTest(champion_name, done) {
-    champion.getImageOf(champion_name, function (data) {
+    champion.getThumbnailOf(champion_name, function (data) {
         data.should.not.equal(undefined);
 
         done();
@@ -64,4 +64,17 @@ describe("Champion Thumbnail Images", function() {
     it ("Dr. Mundo (Test space and period)", function (done) {
         imageTest("Dr. Mundo", done);
     });
+
+    it ("All thumbnails", function (done) {
+        this.timeout(100000);
+        champion.getAllThumbnails(function (result) {
+            // It shouldn't be undefined.
+            result.should.not.equal(undefined);
+
+            // Nor should its length be 0.
+            (result.length).should.not.equal(0);
+
+            done();
+        });
+    })
 });

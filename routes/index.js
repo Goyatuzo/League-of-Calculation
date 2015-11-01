@@ -6,7 +6,7 @@ var champion = new ChampionData();
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  champion.getImageOf("Dr. Mundo");
+  champion.getAllThumbnails();
   res.render('index', { title: 'Express' });
 });
 

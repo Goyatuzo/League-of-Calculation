@@ -33,6 +33,12 @@ function ChampionData() {
         ChampionData.prototype._saveThumbnailsFromData(bodyJSON['data']);
     });
 
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    ////  Methods
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+
     /**
      * If necessary, the data will be written to the disk. There are two conditions where the data
      * will be stored locally:
@@ -115,7 +121,7 @@ function ChampionData() {
         var dataJSON;
 
         fs.readFile(filePath, function (file_err, file_data) {
-            // Parse the file and obtain the JSON only if the file is valid.
+            // Parse the file and obtain the JSON only if the file is valid.p
             if (file_data !== undefined) {
                 console.log("Parsing local champion static data...");
                 dataJSON = JSON.parse(file_data);
@@ -125,18 +131,78 @@ function ChampionData() {
         });
     };
 
-    ChampionData.prototype.getImageOf = function (champion_name, callback) {
-        // Remove all symbols and spaces.
-        champion_name = champion_name.replace(/[\s!\?\.']/g, "");
-
-        // The filepath where the image should be stored.
-        var filePath = api_constants.imageFilePath + champion_name + '.png';
-
-        fs.readFile(filePath, {encoding: 'binary'}, function(err, image) {
-            if (err) callback(undefined);
-            else callback(image);
-        });
-    }
+    ///**
+    // * Given the input of a champion name, get the thumbnail of that champion.
+    // *
+    // * @param champion_name
+    // * @param callback
+    // */
+    //ChampionData.prototype.getThumbnailOf = function (champion_name, callback) {
+    //    // Remove all symbols and spaces.
+    //    champion_name = champion_name.replace(/[\s!\?\.']/g, "");
+    //
+    //    // The filepath where the image should be stored.
+    //    var filePath = api_constants.imageFilePath + champion_name + '.png';
+    //
+    //    fs.readFile(filePath, {encoding: 'binary'}, function(err, image) {
+    //        if (err) {
+    //            console.log("Thumbnail for " + champion_name + " could not be found.");
+    //            callback(undefined);
+    //        } else {
+    //            callback(image);
+    //        }
+    //    });
+    //};
+    //
+    /////**
+    //// * Helper function necessary to keep variables in check when trying to assign a new
+    //// * variable using a variable that could potentially get lost in a for loop.
+    //// *
+    //// * @param name
+    //// * @param callback
+    //// * @private
+    //// */
+    ////ChampionData.prototype._createThumbnailArrayEntry = function (name, callback) {
+    ////    ChampionData.prototype.getThumbnailOf(name, function (image) {
+    ////        var newEntry = {
+    ////            name: name,
+    ////            thumbnail: image
+    ////        };
+    ////
+    ////        callback(newEntry);
+    ////    });
+    ////};
+    ////
+    /////**
+    //// * Using the getThumbnailOf function from earlier, obtain the list of all the thumbnails.
+    //// *
+    //// * @param callback
+    //// */
+    ////ChampionData.prototype.getAllThumbnails = function (callback) {
+    ////    // The final array of thumbnails to be parsed into the callback.
+    ////    var thumbnailArray = [];
+    ////    var championLength;
+    ////
+    ////    ChampionData.prototype.getData(function (championList) {
+    ////        // Set the length of championList here.
+    ////        championLength = Object.keys(championList).length;
+    ////
+    ////        for (var champion in championList) {
+    ////            if (championList.hasOwnProperty(champion)) {
+    ////                ChampionData.prototype._createThumbnailArrayEntry(champion, function (entry) {
+    ////                    thumbnailArray.push(entry);
+    ////
+    ////                    // If the championList array and the thumbnail array are equal, that means all thumbnails
+    ////                    // were successfully added. Proceed.
+    ////                    if (thumbnailArray.length == championLength) {
+    ////                        console.log("All thumbnails retrieved.");
+    ////                        callback(thumbnailArray);
+    ////                    }
+    ////                });
+    ////            }
+    ////        }
+    ////    });
+    ////};
 }
 
 module.exports = ChampionData;
