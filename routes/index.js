@@ -6,8 +6,12 @@ var champion = new ChampionData();
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  champion.getAllThumbnails();
-  res.render('index', { title: 'Express' });
+    champion.getThumbnailPathsForJade(function (imagePaths) {
+        "use strict";
+        res.render('index', {
+            imagePaths: imagePaths
+        });
+    });
 });
 
 module.exports = router;
