@@ -131,6 +131,35 @@ function ChampionData() {
         });
     };
 
+    /**
+     * Get an array of SORTED paths to thumbnail images for each champion. This is primarily for jade.
+     *
+     * @param callback
+     */
+    ChampionData.prototype.getThumbnailPathsForJade = function (callback) {
+        var champion;
+        var totalChampions;
+        var pathsArray = [];
+
+        ChampionData.prototype.getData(function (championList) {
+            // Save length of championList so we know when pathsArray is complete.
+            totalChampions = Object.keys(championList).length;
+
+            for (champion in championList) {
+                if (championList.hasOwnProperty(champion)) {
+                    // The keys in championList are already formatted so no need to process.
+                    pathsArray.push(api_constants.imageFilePathJade + champion + '.png');
+
+                    // If all champions have been accounted for, continue to the next step.
+                    if (pathsArray.length === totalChampions) {
+                        // Sort it alphabetically to achieve consistency.
+                        callback(pathsArray.sort());
+                    }
+                }
+            }
+        });
+    };
+
     ///**
     // * Given the input of a champion name, get the thumbnail of that champion.
     // *
