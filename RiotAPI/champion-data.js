@@ -83,8 +83,6 @@ function ChampionData() {
 
                 // Try to get the image data.
                 request(thumbnailURL, {encoding: 'binary'}, function (req_err, req_res) {
-
-                    req_res.setEncoding('binary');
                     // Since async thread could be at a different location in code, make temp.
                     var pathArray = (req_res['request']['uri']['path']).split('/');
 
@@ -127,8 +125,17 @@ function ChampionData() {
         });
     };
 
-    ChampionData.prototype.getImages = function (callback) {
+    ChampionData.prototype.getImageOf = function (champion_name, callback) {
+        // Remove all symbols and spaces.
+        champion_name = champion_name.replace(/[\s!\?\.']/g, "");
 
+        // The filepath where the image should be stored.
+        var filePath = api_constants.imageFilePath + champion_name + '.png';
+
+        fs.readFile(filePath, {encoding: 'binary'}, function(err, image) {
+            if (err) callback(undefined);
+            else callback(image);
+        });
     }
 }
 
