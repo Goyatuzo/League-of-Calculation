@@ -35,8 +35,8 @@ router.get('/:yourChamp/:enemyChamp', function(req, res) {
             enemyName:      enemyData['name'],
             youStats:       youData['stats'],
             enemyStats:     youData['stats'],
-            youThumbnail:   getThumbnailPath(you),
-            enemyThumbnail: getThumbnailPath(enemy)
+            youThumbnail:   'http://localhost:8081/' + getThumbnailPath(you),
+            enemyThumbnail: 'http://localhost:8081/' + getThumbnailPath(enemy)
         });
     });
 });
