@@ -1,8 +1,30 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #00B7FF;
+}
+
+.championThumbnail {
+    width: 75px;
+    height: auto;
+
+    margin: 3px;
+}
+
+.championThumbnail:hover {
+    opacity: 0.5;
+    filter: alpha(opacity=50); /* For IE 8 and older */
+
+    cursor: pointer;
+}
+
+/*
+When the user's champion is selected, there should be a blue border
+on the outline of the image.
+*/
+#you {
+    outline: 6px solid #2f6fad;
 }

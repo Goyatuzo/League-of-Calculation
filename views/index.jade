@@ -3,6 +3,16 @@ extends layout
 block content
     h1= title
 
-    ul
-        each path in imagePaths
-            img.championPortrait(src= path)
+    //Container for the website.
+    #container
+        // Shows whether it's time to choose your champion or the enemy champion.
+        #currentSelection
+            h1 Choose your champion.
+        // Display champion thumbnails.
+        #championThumbnails
+            ul
+                each path in imagePaths
+                    img.championThumbnail(src= path)
+
+    script(src="//code.jquery.com/jquery-1.11.3.min.js")
+    script(src='./js/selection.js')
