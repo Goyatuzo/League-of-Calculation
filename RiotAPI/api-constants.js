@@ -14,5 +14,5 @@ module.exports = {
     versionsURL:    'https://global.api.pvp.net/api/lol/static-data/na/v1.2/versions?',
     jsonFilePath:   './public/' + jsonPath,
     imageFilePath:  './public/' + imagePath,
-    imageFilePathJade: imagePath
+    imageFilePathJade: 'http://localhost:8081/' + imagePath
 };

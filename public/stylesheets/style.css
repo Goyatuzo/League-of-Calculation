@@ -28,3 +28,9 @@ on the outline of the image.
 #chosenThumbnail {
     outline: 6px solid #2f6fad;
 }
+
+.championInformation {
+    float: left;
+    display: inline-block;
+    width: 50%;
+}
