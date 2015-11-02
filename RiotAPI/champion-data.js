@@ -9,35 +9,40 @@ var api_constants = require('./api-constants');
 function ChampionData() {
     "use strict";
 
-    console.log("Initializing Champion data retrieval.");
-
-    var dataURL = api_constants.champDataURL + 'champData=all' + '&api_key=' + api_constants.apiKey;
-
-    /**
-     * Get champion data.
-     */
-    request(dataURL, function (req_err, req_res) {
-        var bodyJSON = JSON.parse(req_res['body']);    // JSON from the API.
-
-        // If the request brought nothing useful, just exit.
-        if (req_res['body'] === undefined || bodyJSON['status'] !== undefined) {
-            console.log("Couldn't connect to /champions.");
-            return;
-        }
-
-        console.log("Connected to /champions.");
-
-        // Save the JSON locally.
-        ChampionData.prototype._saveData(req_res['body']);
-        // Save the thumbnails locally.
-        ChampionData.prototype._saveThumbnailsFromData(bodyJSON['data']);
-    });
-
     /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
     ////  Methods
     /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Connect to the RiotAPI and request data; afterwards save it locally onto the server.
+     */
+    ChampionData.prototype.requestFromRiot = function () {
+        console.log("Initializing Champion data retrieval.");
+
+        var dataURL = api_constants.champDataURL + 'champData=all' + '&api_key=' + api_constants.apiKey;
+
+        /**
+         * Get champion data.
+         */
+        request(dataURL, function (req_err, req_res) {
+            var bodyJSON = JSON.parse(req_res['body']);    // JSON from the API.
+
+            // If the request brought nothing useful, just exit.
+            if (req_res['body'] === undefined || bodyJSON['status'] !== undefined) {
+                console.log("Couldn't connect to /champions.");
+                return;
+            }
+
+            console.log("Connected to /champions.");
+
+            // Save the JSON locally.
+            ChampionData.prototype._saveData(req_res['body']);
+            // Save the thumbnails locally.
+            ChampionData.prototype._saveThumbnailsFromData(bodyJSON['data']);
+        });
+    };
 
     /**
      * If necessary, the data will be written to the disk. There are two conditions where the data
@@ -158,6 +163,16 @@ function ChampionData() {
                 }
             }
         });
+    };
+
+    /**
+     * Given an input of a champion name, strip all non-letters.
+     *
+     * @param championName
+     * @returns {void|string|XML}
+     */
+    ChampionData.prototype.stripNonLetters = function (championName) {
+        return championName.replace(/\W/g, '');
     };
 
     ///**

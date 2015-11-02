@@ -5,7 +5,7 @@
 "use strict";
 
 var chai = require('chai');
-var ChampionData = require('../../RiotAPI/champion-data.js');
+var ChampionData = require('../RiotAPI/champion-data.js');
 
 var champion = new ChampionData();
 
@@ -66,6 +66,26 @@ describe("Thumbnail Filepaths", function () {
 
             done();
         })
+    })
+});
+
+describe('Test for champion names being properly changed.', function () {
+    it('Dr. Mundo', function (done) {
+        champion.stripNonLetters("Dr. Mundo").should.equal("DrMundo");
+
+        done();
+    });
+
+    it('Thresh', function (done) {
+        champion.stripNonLetters('Thresh').should.equal('Thresh');
+
+        done();
+    });
+
+    it('Jarvan IV', function (done) {
+        champion.stripNonLetters("Jarvan IV").should.equal('JarvanIV');
+
+        done();
     })
 });
 

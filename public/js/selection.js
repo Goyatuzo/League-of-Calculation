@@ -26,7 +26,7 @@ function getChampionFromPath(path) {
 $(".championThumbnail").click(function () {
     // If your champion is not yet selected, change the id of the element to visually show champ has been chosen.
     if (yourChampion === undefined) {
-        $(this).attr({id: 'you'});
+        $(this).attr({id: 'chosenThumbnail'});
         yourChampion = getChampionFromPath($(this)[0].currentSrc);
     } else {    // Otherwise enemy champ was selected and now you need to move to the next page.
         enemyChampion = getChampionFromPath($(this)[0].currentSrc);

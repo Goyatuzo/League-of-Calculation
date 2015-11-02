@@ -25,6 +25,6 @@ a {
 When the user's champion is selected, there should be a blue border
 on the outline of the image.
 */
-#you {
+#chosenThumbnail {
     outline: 6px solid #2f6fad;
 }
