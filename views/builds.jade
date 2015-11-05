@@ -5,14 +5,26 @@ extends layout
 
 block content
     #container
+
+        - var champName = youName
         #you.championInformation
             img.championThumbnail(src= youThumbnail)
             include ./champion-info
 
+        - champName = enemyName
         #enemy.championInformation
             img.championThumbnail(src= enemyThumbnail)
             include ./champion-info
 
         include ./scripts
+
+        // Variables that were passed in from the server.
+        script.
+            var youData = #{youStats};
+            var enemyData = #{enemyStats};
+
+            console.log(!{youStats});
+
+        script(src='/js/calculate-stats.js')
         script.
             $('.dropdown-toggle').dropdown()
