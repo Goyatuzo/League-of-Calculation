@@ -6,9 +6,13 @@ extends layout
 block content
     #container
         #you.championInformation
-                img.championThumbnail(src= youThumbnail)
-                .championStats
+            img.championThumbnail(src= youThumbnail)
+            include ./champion-info
 
         #enemy.championInformation
-                img.championThumbnail(src= enemyThumbnail)
-                .championStats
+            img.championThumbnail(src= enemyThumbnail)
+            include ./champion-info
+
+        include ./scripts
+        script.
+            $('.dropdown-toggle').dropdown()

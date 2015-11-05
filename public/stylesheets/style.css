@@ -34,3 +34,8 @@ on the outline of the image.
     display: inline-block;
     width: 50%;
 }
+
+.championStats {
+    display: inline-block;
+    width: auto;
+}

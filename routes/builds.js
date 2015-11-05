@@ -23,8 +23,6 @@ router.get('/:yourChamp/:enemyChamp', function(req, res) {
     var youData;
     var enemyData;
 
-    var host = '//' + req.headers.host;
-
     /*
      Get the champion's thumbnail path and champion data.
      */
@@ -37,8 +35,8 @@ router.get('/:yourChamp/:enemyChamp', function(req, res) {
             enemyName:      enemyData['name'],
             youStats:       youData['stats'],
             enemyStats:     youData['stats'],
-            youThumbnail:   host + getThumbnailPath(you),
-            enemyThumbnail: host + getThumbnailPath(enemy)
+            youThumbnail:   getThumbnailPath(you),
+            enemyThumbnail: getThumbnailPath(enemy)
         });
     });
 });
