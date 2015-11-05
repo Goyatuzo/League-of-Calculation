@@ -3,7 +3,7 @@
  */
 var fs = require('fs');
 
-const apiKey = fs.readFileSync('./RiotAPI/api-key.txt');
+const apiKey = process.env.apiKey;
 const imagePath = 'resources/images/';
 const jsonPath = 'resources/data/';
 

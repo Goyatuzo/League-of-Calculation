@@ -10,5 +10,4 @@ Live Demo of Server
 
 Using it on your own server
 ---------------------------
-Put your own API key under the RiotAPI folder and name it "api-key.txt" if you wish to host this website on your
-own server.
+Be sure to put your own API key in the system environment variable.

@@ -34,6 +34,3 @@ node_modules
 # Intellij
 .idea/
 LolCalc.iml
-
-# Make sure API key isn't released.
-RiotAPI/api-key.txt

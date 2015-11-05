@@ -31,6 +31,8 @@ function ChampionData() {
 
             // If the request brought nothing useful, just exit.
             if (req_res['body'] === undefined || bodyJSON['status'] !== undefined) {
+
+                console.log(api_constants.apiKey);
                 console.log("Couldn't connect to /champions.");
                 return;
             }
