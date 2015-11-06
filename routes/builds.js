@@ -33,6 +33,7 @@ router.get('/:yourChamp/:enemyChamp', function(req, res) {
         res.render('builds', {
             youName:        youData['name'],
             enemyName:      enemyData['name'],
+            youData:        youData,
             youThumbnail:   getThumbnailPath(you),
             enemyThumbnail: getThumbnailPath(enemy)
         });

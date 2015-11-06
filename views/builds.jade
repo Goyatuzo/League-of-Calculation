@@ -18,6 +18,10 @@ block content
 
         include ./scripts
 
-        script(src='/js/calculate-stats.js')
         script.
-            $('.dropdown-toggle').dropdown()
+            //noinspection JSUnusedAssignment
+            var youData = !{JSON.stringify(youData)};
+            //noinspection JSUnusedAssignment
+            var enemyData = !{JSON.stringify(enemyData)};
+
+        script(src='/js/calculate-stats.js')

@@ -9,7 +9,6 @@ var ChampionData = require('./RiotAPI/champion-data.js');
 
 var routes = require('./routes/index');
 var builds = require('./routes/builds');
-var champ = require('./routes/champion-data');
 
 var app = express();
 
@@ -30,8 +29,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-
-app.use('/champion', champ);
 app.use('/', builds);
 
 // catch 404 and forward to error handler
