@@ -6,7 +6,7 @@ you will can inflict on the enemy.
 
 Live Demo of Server
 -------------------
-[Hosted by Elastic Beanstalk](http://lolcalc.elasticbeanstalk.com/)
+[Hosted by Heroku](http://leagueofcalculation.heroku.com/)
 
 Using it on your own server
 ---------------------------
