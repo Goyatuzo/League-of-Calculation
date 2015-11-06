@@ -18,13 +18,6 @@ block content
 
         include ./scripts
 
-        // Variables that were passed in from the server.
-        script.
-            var youData = #{youStats};
-            var enemyData = #{enemyStats};
-
-            console.log(!{youStats});
-
         script(src='/js/calculate-stats.js')
         script.
             $('.dropdown-toggle').dropdown()

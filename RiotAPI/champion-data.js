@@ -154,6 +154,23 @@ function ChampionData() {
     };
 
     /**
+     * Return the entry of the champion specified by championName.
+     *
+     * @param championName
+     * @param callback
+     */
+    ChampionData.prototype.getChampionData = function (championName, callback) {
+        "use strict";
+
+        // Make sure there are no symbols or white-spaces in the name.
+        var name = ChampionData.prototype.stripNonLetters(championName);
+
+        ChampionData.prototype.getData(function (championList) {
+            callback(championList[name]);
+        });
+    };
+
+    /**
      * Get an array of SORTED paths to thumbnail images for each champion. This is primarily for jade.
      *
      * @param callback

@@ -37,6 +37,16 @@ describe("Champion Data", function() {
         });
 
     });
+
+    it('Get Ekko-specific data.', function (done) {
+        champion.getChampionData('Ekko', function (data) {
+
+            // data should now be Ekko's entry.
+            data.name.should.equal('Ekko');
+
+            done();
+        });
+    });
 });
 
 describe("Thumbnail Filepaths", function () {
@@ -57,7 +67,7 @@ describe("Thumbnail Filepaths", function () {
 
         champion.getThumbnailPathsForJade(function (thumbPaths) {
             for (var i = 0; i < thumbPaths.length; ++i) {
-                if (thumbPaths[i] === 'resources/images/Thresh.png') {
+                if (thumbPaths[i] === '/resources/images/Thresh.png') {
                     found = true;
                 }
             }
