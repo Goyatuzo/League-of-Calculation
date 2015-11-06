@@ -5,15 +5,10 @@
 var request = require('request');
 var fs = require('fs');
 var api_constants = require('./api-constants');
+var mkdirp = require('mkdirp');
 
 function ChampionData() {
     "use strict";
-
-    /////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////
-    ////  Methods
-    /////////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Connect to the RiotAPI and request data; afterwards save it locally onto the server.
@@ -50,6 +45,17 @@ function ChampionData() {
     };
 
     /**
+     * Checks to see if a folder exists at the path. If not, then it will construct
+     * the folder.
+     *
+     * @param folderPath
+     * @private
+     */
+    ChampionData.prototype._checkFolder = function (folderPath) {
+        mkdirp.sync(folderPath);
+    };
+
+    /**
      * If necessary, the data will be written to the disk. There are two conditions where the data
      * will be stored locally:
      *  * If the file doesn't exist.
@@ -61,6 +67,10 @@ function ChampionData() {
     ChampionData.prototype._saveData = function (raw_body) {
         var filePath = api_constants.jsonFilePath + 'championData.json';
         var bodyJSON = JSON.parse(raw_body);
+
+        // Check the folder exists.
+        ChampionData.prototype._checkFolder(api_constants.jsonFilePath);
+
         // Read the file to compare the two.
         fs.readFile(filePath, function (file_err, file_data) {
 
@@ -87,7 +97,9 @@ function ChampionData() {
         var thumbnailName;
         // The URL of the thumbnail.
         var thumbnailURL;
-        // Temp variable to hold the path of the champion on the request.
+
+        // Check to see the folder path exists, if not create.
+        ChampionData.prototype._checkFolder(api_constants.imageFilePath);
 
         console.log("Saving thumbnail images.");
         for (var champion in dataJSON) {
