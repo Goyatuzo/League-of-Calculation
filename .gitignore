@@ -34,3 +34,7 @@ node_modules
 # Intellij
 .idea/
 LolCalc.iml
+
+# Don't upload images and JSON data.
+public/resources/images/*
+public/resources/data/*
