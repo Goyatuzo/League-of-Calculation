@@ -6,6 +6,8 @@
 
 var chai = require('chai');
 var ChampionData = require('../RiotAPI/champion-data.js');
+var it = require('mocha/lib/mocha.js').it;
+var describe = require('mocha/lib/mocha.js').describe;
 
 var champion = new ChampionData();
 

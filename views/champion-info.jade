@@ -6,11 +6,10 @@
     span.
         #{champName}
     .dropdown
-        a(href="#", data-toggle="dropdown").dropdown-toggle Level
+        a(href="#", data-toggle="dropdown").dropdown-toggle Level #[span(class='caret')]
         ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu')
             - for (var i = 1; i < 19; ++i) {
-                li
-                    a(href='#', tabindex='-1') #{i}
+                li #[a(href='#', tabindex='-1') #{i}]
             - }
 
 .stats

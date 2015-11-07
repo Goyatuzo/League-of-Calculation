@@ -34,6 +34,7 @@ router.get('/:yourChamp/:enemyChamp', function(req, res) {
             youName:        youData['name'],
             enemyName:      enemyData['name'],
             youData:        youData,
+            enemyData:      enemyData,
             youThumbnail:   getThumbnailPath(you),
             enemyThumbnail: getThumbnailPath(enemy)
         });
