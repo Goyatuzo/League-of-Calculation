@@ -22,11 +22,15 @@ function updateStatsDisplay($player, data, level) {
     var $apCell = $player.find('.ap');
 
     var $armorCell = $player.find('.armor');
-    var $mrCell = $player.find('.ms');
+    var $mrCell = $player.find('.mr');
 
     var stats = data['stats'];
 
     $adCell.text(getChampionAttackDamage(stats, level));
+    $asCell.text(getChampionAttackSpeed(stats, level));
+    // AP starts from 0 and only grows from item.
+    $armorCell.text(getChampionArmor(stats, level));
+    $mrCell.text(getChampionMR(stats, level));
 }
 
 /**
@@ -43,17 +47,52 @@ function getChampionAttackDamage(stats, level) {
     var adPerLevel = stats['attackdamageperlevel'];
 
     // Round to the nearest hundredth.
-    return (baseAD + adPerLevel * level).toFixed(2);
+    return (baseAD + adPerLevel * level).toFixed(3);
 }
 
-function getAttackSpeed(stats, level) {
+/**
+ * Based on the input stats and the level, calculate the champion's AS.
+ *
+ * @param stats
+ * @param level
+ * @returns {string}
+ */
+function getChampionAttackSpeed(stats, level) {
     "use strict";
 
-    var baseAS = stats['attackspeed'];
+    var offset = stats['attackspeedoffset'];
     var asPerLevel = stats['attackspeedperlevel'];
+
+    // Attack speed grow is from level 2, so ignore level 1.
+    level -= 1;
+
+    return ((0.625 / (1 + offset)) * (1 + (asPerLevel * level) / 100)).toFixed(3);
 }
 
+/**
+ * Based on the input stats and the level, calculate the champion's armor.
+ *
+ * @param stats
+ * @param level
+ * @returns {string}
+ */
+function getChampionArmor(stats, level) {
+    "use strict";
 
+    var baseArmor = stats['armor'];
+    var armorPerLevel = stats['armorperlevel'];
+
+    return (baseArmor + level * armorPerLevel).toFixed(3);
+}
+
+function getChampionMR(stats, level) {
+    "use strict";
+
+    var baseMR = stats['spellblock'];
+    var mrPerLevel = stats['spellblockperlevel'];
+
+    return (baseMR + level * mrPerLevel).toFixed(3);
+}
 
 // JS to enable the dropdown functionality for levels.
 $('.dropdown-toggle').dropdown();
