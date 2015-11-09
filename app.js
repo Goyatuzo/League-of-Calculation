@@ -14,8 +14,7 @@ var tests = require('./routes/tests');
 var app = express();
 
 // Construct the data and request latest data.
-var champion = new ChampionData();
-champion.requestFromRiot();
+ChampionData.requestFromRiot();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

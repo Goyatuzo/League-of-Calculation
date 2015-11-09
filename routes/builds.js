@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var ChampionData = require('./../RiotAPI/champion-data.js');
 var api_constants = require('./../RiotAPI/api-constants.js');
-var champion = new ChampionData();
 
 /**
  * Given a champion name, get the path of the thumbnail. This function
@@ -12,7 +11,7 @@ var champion = new ChampionData();
  * @returns {string}
  */
 function getThumbnailPath(championName) {
-    return api_constants.champThumbnailPathJade + champion.stripNonLetters(championName) + '.png';
+    return api_constants.champThumbnailPathJade + ChampionData.stripNonLetters(championName) + '.png';
 }
 
 /* GET users listing. */
@@ -26,7 +25,7 @@ router.get('/:yourChamp/:enemyChamp', function(req, res) {
     /*
      Get the champion's thumbnail path and champion data.
      */
-    champion.getData(function (championData) {
+    ChampionData.getData(function (championData) {
         youData = championData[you];
         enemyData = championData[enemy];
 

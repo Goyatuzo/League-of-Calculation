@@ -8,9 +8,6 @@ var chai = require('chai');
 var ChampionData = require('../RiotAPI/champion-data.js');
 var it = require('mocha/lib/mocha.js').it;
 var describe = require('mocha/lib/mocha.js').describe;
-
-var champion = new ChampionData();
-
 var expect = chai.expect;
 var should = chai.should();
 
@@ -21,7 +18,7 @@ describe("Champion Data", function() {
     "use strict";
 
     it('Data should not be undefined.', function (done) {
-        champion.getData(function (championList) {
+        ChampionData.getData(function (championList) {
             championList.should.not.equal(undefined);
 
             done();
@@ -30,7 +27,7 @@ describe("Champion Data", function() {
 
     it('Data should exist for Thresh.', function (done) {
 
-        champion.getData(function (championList) {
+        ChampionData.getData(function (championList) {
 
             championList['Thresh'].name.should.equal('Thresh');
             championList['Thresh']['spells'].should.not.equal(undefined);
@@ -41,7 +38,7 @@ describe("Champion Data", function() {
     });
 
     it('Get Ekko-specific data.', function (done) {
-        champion.getChampionData('Ekko', function (data) {
+        ChampionData.getChampionData('Ekko', function (data) {
 
             // data should now be Ekko's entry.
             data.name.should.equal('Ekko');
@@ -55,7 +52,7 @@ describe("Thumbnail Filepaths", function () {
     "use strict";
 
     it('Thumbnails filepaths should not be empty.', function (done) {
-        champion.getThumbnailPathsForJade(function (thumbPaths) {
+        ChampionData.getThumbnailPathsForJade(function (thumbPaths) {
             thumbPaths.should.not.equal(undefined);
             (thumbPaths.length).should.not.equal(0);
 
@@ -67,9 +64,9 @@ describe("Thumbnail Filepaths", function () {
         // This boolean will trigger to true if Thresh has been found.
         var found = false;
 
-        champion.getThumbnailPathsForJade(function (thumbPaths) {
+        ChampionData.getThumbnailPathsForJade(function (thumbPaths) {
             for (var i = 0; i < thumbPaths.length; ++i) {
-                if (thumbPaths[i] === '/resources/images/Thresh.png') {
+                if (thumbPaths[i] === '/resources/images/champions/Thresh.png') {
                     found = true;
                 }
             }
@@ -83,19 +80,19 @@ describe("Thumbnail Filepaths", function () {
 
 describe('Test for champion names being properly changed.', function () {
     it('Dr. Mundo', function (done) {
-        champion.stripNonLetters("Dr. Mundo").should.equal("DrMundo");
+        ChampionData.stripNonLetters("Dr. Mundo").should.equal("DrMundo");
 
         done();
     });
 
     it('Thresh', function (done) {
-        champion.stripNonLetters('Thresh').should.equal('Thresh');
+        ChampionData.stripNonLetters('Thresh').should.equal('Thresh');
 
         done();
     });
 
     it('Jarvan IV', function (done) {
-        champion.stripNonLetters("Jarvan IV").should.equal('JarvanIV');
+        ChampionData.stripNonLetters("Jarvan IV").should.equal('JarvanIV');
 
         done();
     })
