@@ -4,7 +4,17 @@
 
 var request = require('request');
 var api_constants = require('./api-constants');
+var mkdirp = require('mkdirp');
 
+function _errorMessage(dataURL) {
+    "use strict";
+    console.log("Couldn't connect to " + dataURL);
+
+    // Basic debugging that could quickly be solved.
+    if (api_constants.apiKey === undefined) {
+        console.log("Are you sure you have your API key in your environment variable?");
+    }
+}
 /**
  * Retrieve the JSON response from dataURL and process it further via callback function(s).
  *
@@ -15,17 +25,16 @@ exports.retrieveAndProcessJson = function retrieveAndProcessJson(dataURL, callba
     "use strict";
     request(dataURL, function (req_err, req_res) {
         // Try to parse the JSON.
-        var bodyJSON = JSON.parse(req_res['body']);
+        try {
+            var bodyJSON = JSON.parse(req_res['body']);
+        } catch (err) {
+            _errorMessage(dataURL);
+            return;
+        }
 
         // If the parsing failed or the retrieval failed, connection failed.
-        if (req_res['body'] === undefined || bodyJSON['status'] !== undefined) {
-            console.log("Couldn't connect to " + dataURL);
-
-            // Basic debugging that could quickly be solved.
-            if (api_constants.apiKey === undefined) {
-                console.log("Are you sure you have your API key in your environment variable?");
-            }
-
+        if (bodyJSON['status'] !== undefined) {
+            _errorMessage(dataURL);
             return;
         }
 
@@ -52,4 +61,14 @@ exports.retrieveAndProcessImage = function retrieveAndProcessImage(imageURL, cal
 
         callback(imageName, req_res['body']);
     });
+};
+
+/**
+ * Checks to see if a folder exists at the path. If not, then it will construct
+ * the folder.
+ *
+ * @param folderPath
+ */
+exports.checkFolder = function checkFolder(folderPath) {
+    mkdirp.sync(folderPath);
 };

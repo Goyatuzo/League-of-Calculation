@@ -5,7 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var ChampionData = require('./RiotAPI/champion-data.js');
+var championData = require('./RiotAPI/champion-data.js');
+var itemData = require('./RiotAPI/item-data.js');
 
 var routes = require('./routes/index');
 var builds = require('./routes/builds');
@@ -14,7 +15,8 @@ var tests = require('./routes/tests');
 var app = express();
 
 // Construct the data and request latest data.
-ChampionData.requestFromRiot();
+championData.requestFromRiot();
+itemData.requestFromRiot();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

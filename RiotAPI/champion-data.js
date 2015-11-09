@@ -3,7 +3,6 @@
  */
 "use strict";
 
-var request = require('request');
 var fs = require('fs');
 var api_constants = require('./api-constants');
 var mkdirp = require('mkdirp');
@@ -17,10 +16,6 @@ exports.requestFromRiot = function requestFromRiot () {
 
     var dataURL = api_constants.champDataURL + 'champData=all&api_key=' + api_constants.apiKey;
 
-    /**
-     * Get champion data.
-     */
-
     fileFuncs.retrieveAndProcessJson(dataURL, function (raw_body) {
         var bodyJSON = JSON.parse(raw_body);
 
@@ -28,17 +23,6 @@ exports.requestFromRiot = function requestFromRiot () {
         _saveThumbnailsFromData(bodyJSON['data']);
     });
 };
-
-/**
- * Checks to see if a folder exists at the path. If not, then it will construct
- * the folder.
- *
- * @param folderPath
- * @private
- */
-function _checkFolder(folderPath) {
-    mkdirp.sync(folderPath);
-}
 
 /**
  * If necessary, the data will be written to the disk. There are two conditions where the data
@@ -54,7 +38,7 @@ function _saveData(raw_body) {
     var bodyJSON = JSON.parse(raw_body);
 
     // Check the folder exists.
-    _checkFolder(api_constants.jsonFilePath);
+    fileFuncs.checkFolder(api_constants.jsonFilePath);
 
     // Read the file to compare the two.
     fs.readFile(filePath, function (file_err, file_data) {
@@ -62,7 +46,9 @@ function _saveData(raw_body) {
         // If the file couldn't be retrieved, it doesn't exist. So write. Otherwise, check versions.
         if ((file_data === undefined) || (JSON.parse(file_data)['version'] !== bodyJSON['version'])) {
             console.log("Champion data versions don't match. Updating...");
-            fs.writeFile(filePath, raw_body);
+            fs.writeFile(filePath, raw_body, function () {
+                console.log("Wrote champion JSON file.");
+            });
             console.log('Champion Data successfully saved.');
         }
     });
@@ -84,21 +70,23 @@ function _saveThumbnailsFromData(dataJSON) {
     var thumbnailURL;
 
     // Check to see the folder path exists, if not create.
-    _checkFolder(api_constants.champThumbnailPath);
+    fileFuncs.checkFolder(api_constants.champThumbnailPath);
 
     console.log("Saving thumbnail images.");
     for (var champion in dataJSON) {
         if (dataJSON.hasOwnProperty(champion)) {
             thumbnailName = dataJSON[champion]['image']['full'];
             // Construct the URL where the thumbnail is stored.
-            thumbnailURL = 'http://ddragon.leagueoflegends.com/cdn/' + api_constants.currentVersion +
-                '/img/champion/' + thumbnailName;
+            thumbnailURL = api_constants.champThumbnailURL + thumbnailName;
 
             fileFuncs.retrieveAndProcessImage(thumbnailURL, function (fileName, image) {
                 filePath = api_constants.champThumbnailPath + fileName;
 
-                fs.writeFile(filePath, image, 'binary', function (err) {
-                    if (err) console.log("There was a problem saving a thumbnail.");
+                fs.writeFile(filePath, image, { data: 'binary', flag: 'wx' }, function (err) {
+                    if (err) {
+                        console.log("\t" + fileName + " already exists.");
+                        return;
+                    }
 
                     console.log("\tThumbnail " + fileName + " was saved.");
                 })
