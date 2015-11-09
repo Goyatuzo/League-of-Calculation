@@ -64,7 +64,7 @@ function _saveImages(dataJSON) {
                 filePath = api_constants.itemThumbnailPath + fileName;
 
                 // Use 'wx' so it doesn't write if it already exists. Minor optimization.
-                fs.writeFile(filePath, image, { data: 'binary', flag: 'wx' }, function (err) {
+                fs.writeFile(filePath, image, { encoding: 'binary', flag: 'wx' }, function (err) {
                     if (err) {
                         console.log("\t" + fileName + " already exists.");
                         return;

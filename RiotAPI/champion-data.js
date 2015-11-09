@@ -82,7 +82,7 @@ function _saveThumbnailsFromData(dataJSON) {
             fileFuncs.retrieveAndProcessImage(thumbnailURL, function (fileName, image) {
                 filePath = api_constants.champThumbnailPath + fileName;
 
-                fs.writeFile(filePath, image, { data: 'binary', flag: 'wx' }, function (err) {
+                fs.writeFile(filePath, image, { encoding: 'binary', flag: 'wx' }, function (err) {
                     if (err) {
                         console.log("\t" + fileName + " already exists.");
                         return;
