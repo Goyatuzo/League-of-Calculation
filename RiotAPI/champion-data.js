@@ -21,7 +21,7 @@ exports.requestFromRiot = function requestFromRiot () {
      * Get champion data.
      */
 
-    fileFuncs.retrieveJson(dataURL, function (raw_body) {
+    fileFuncs.retrieveAndProcessJson(dataURL, function (raw_body) {
         var bodyJSON = JSON.parse(raw_body);
 
         _saveData(raw_body);
@@ -94,24 +94,18 @@ function _saveThumbnailsFromData(dataJSON) {
             thumbnailURL = 'http://ddragon.leagueoflegends.com/cdn/' + api_constants.currentVersion +
                 '/img/champion/' + thumbnailName;
 
-            // Try to get the image data.
-            request(thumbnailURL, {encoding: 'binary'}, function (req_err, req_res) {
-                // Since async thread could be at a different location in code, make temp.
-                var pathArray = (req_res['request']['uri']['path']).split('/');
-
-                // The entire path is converted to an array, and we only need the last element.
-                var fileName = pathArray[pathArray.length - 1];
+            fileFuncs.retrieveAndProcessImage(thumbnailURL, function (fileName, image) {
                 filePath = api_constants.champThumbnailPath + fileName;
 
-                fs.writeFile(filePath, req_res.body, 'binary', function (err) {
+                fs.writeFile(filePath, image, 'binary', function (err) {
                     if (err) console.log("There was a problem saving a thumbnail.");
 
                     console.log("\tThumbnail " + fileName + " was saved.");
-                });
+                })
             });
         }
     }
-};
+}
 
 /**
  * Obtain locally stored champion data for all champions.

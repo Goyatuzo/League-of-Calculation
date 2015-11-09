@@ -5,7 +5,13 @@
 var request = require('request');
 var api_constants = require('./api-constants');
 
-exports.retrieveJson = function retrieveJson(dataURL, callback) {
+/**
+ * Retrieve the JSON response from dataURL and process it further via callback function(s).
+ *
+ * @param dataURL
+ * @param callback
+ */
+exports.retrieveAndProcessJson = function retrieveAndProcessJson(dataURL, callback) {
     "use strict";
     request(dataURL, function (req_err, req_res) {
         // Try to parse the JSON.
@@ -28,5 +34,22 @@ exports.retrieveJson = function retrieveJson(dataURL, callback) {
 
         // Callback.
         callback(req_res['body']);
+    });
+};
+
+/**
+ * Retrieve the image data at the end of imageURL and further process it via callback function.
+ *
+ * @param imageURL
+ * @param callback
+ */
+exports.retrieveAndProcessImage = function retrieveAndProcessImage(imageURL, callback) {
+    "use strict";
+    request(imageURL, {encoding: 'binary'}, function (req_err, req_res) {
+        // Extract the image name by looking at the very end of the path.
+        var pathArray = (req_res['request']['uri']['path']).split('/');
+        var imageName = pathArray[pathArray.length - 1];
+
+        callback(imageName, req_res['body']);
     });
 };
