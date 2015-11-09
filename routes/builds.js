@@ -12,7 +12,7 @@ var champion = new ChampionData();
  * @returns {string}
  */
 function getThumbnailPath(championName) {
-    return api_constants.imageFilePathJade + champion.stripNonLetters(championName) + '.png';
+    return api_constants.champThumbnailPathJade + champion.stripNonLetters(championName) + '.png';
 }
 
 /* GET users listing. */

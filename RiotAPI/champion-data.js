@@ -99,7 +99,7 @@ function ChampionData() {
         var thumbnailURL;
 
         // Check to see the folder path exists, if not create.
-        ChampionData.prototype._checkFolder(api_constants.imageFilePath);
+        ChampionData.prototype._checkFolder(api_constants.champThumbnailPath);
 
         console.log("Saving thumbnail images.");
         for (var champion in dataJSON) {
@@ -116,7 +116,7 @@ function ChampionData() {
 
                     // The entire path is converted to an array, and we only need the last element.
                     var fileName = pathArray[pathArray.length - 1];
-                    filePath = api_constants.imageFilePath + fileName;
+                    filePath = api_constants.champThumbnailPath + fileName;
 
                     fs.writeFile(filePath, req_res.body, 'binary', function (err) {
                         if (err) console.log("There was a problem saving a thumbnail.");
@@ -187,7 +187,7 @@ function ChampionData() {
             for (champion in championList) {
                 if (championList.hasOwnProperty(champion)) {
                     // The keys in championList are already formatted so no need to process.
-                    pathsArray.push(api_constants.imageFilePathJade + champion + '.png');
+                    pathsArray.push(api_constants.champThumbnailPathJade + champion + '.png');
 
                     // If all champions have been accounted for, continue to the next step.
                     if (pathsArray.length === totalChampions) {

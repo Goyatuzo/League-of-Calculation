@@ -1,21 +1,21 @@
 //
    Created by Yuto on 11/2/2015.
 
-extends layout
+extends partials/layout
 
 block content
     #container
         - var champName = youName
         #you.championInformation
             img.championThumbnail(src= youThumbnail)
-            include ./champion-info
+            include partials/champion-info
 
         - champName = enemyName
         #enemy.championInformation
             img.championThumbnail(src= enemyThumbnail)
-            include ./champion-info
+            include partials/champion-info
 
-        include ./scripts
+        include partials/scripts
 
         // Need this in this file or else the syntax won't make any sense.
         script.

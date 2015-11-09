@@ -85,6 +85,13 @@ function getChampionArmor(stats, level) {
     return (baseArmor + level * armorPerLevel).toFixed(3);
 }
 
+/**
+ * Based on the input stats and th level, calculate the champion's MR.
+ *
+ * @param stats
+ * @param level
+ * @returns {string}
+ */
 function getChampionMR(stats, level) {
     "use strict";
 

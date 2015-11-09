@@ -14,6 +14,6 @@ module.exports = {
     champDataURL:   staticEndpoint + 'champion?',
     versionsURL:    staticEndpoint + 'versions?',
     jsonFilePath:   './public/' + jsonPath,
-    imageFilePath:  './public/' + imagePath,
-    imageFilePathJade: '/' + imagePath
+    champThumbnailPath:  './public/' + imagePath + 'champions/',
+    champThumbnailPathJade: '/' + imagePath + 'champions/'
 };
