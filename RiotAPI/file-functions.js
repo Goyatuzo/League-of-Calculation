@@ -56,10 +56,14 @@ exports.retrieveAndProcessImage = function retrieveAndProcessImage(imageURL, cal
     "use strict";
     request(imageURL, {encoding: 'binary'}, function (req_err, req_res) {
         // Extract the image name by looking at the very end of the path.
-        var pathArray = (req_res['request']['uri']['path']).split('/');
+        var pathArray = (imageURL).split('/');
         var imageName = pathArray[pathArray.length - 1];
 
-        callback(imageName, req_res['body']);
+        if (req_err) {
+            console.log("Couldn't retrieve " + imageName);
+        } else {
+            callback(imageName, req_res['body']);
+        }
     });
 };
 
