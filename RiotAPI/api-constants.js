@@ -7,7 +7,7 @@ const apiKey = process.env.apiKey;
 const imagePath = 'resources/images/';
 const jsonPath = 'resources/data/';
 const staticEndpoint = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/';
-const dataDragonImageEndpoint = 'http://ddragon.leagueoflegends.com/cdn/5.21.1/img/';
+const dataDragonImageEndpoint = 'http://ddragon.leagueoflegends.com/cdn/5.22.1/img/';
 
 module.exports = {
     apiKey: apiKey,
