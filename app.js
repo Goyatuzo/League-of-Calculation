@@ -16,7 +16,7 @@ var app = express();
 
 // Construct the data and request latest data.
 championData.requestFromRiot();
-itemData.requestFromRiot();
+itemData.requestFromRiot(11);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

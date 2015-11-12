@@ -8,15 +8,34 @@ var api_constants = require('./api-constants');
 var mkdirp = require('mkdirp');
 var fileFuncs = require('./file-functions');
 
-exports.requestFromRiot = function requestFromRiot () {
+exports.requestFromRiot = function requestFromRiot (mapNumber) {
     console.log("Initializing item data retrieval.");
 
     var dataURL = api_constants.itemURL + 'itemListData=all&api_key=' + api_constants.apiKey;
 
     fileFuncs.retrieveAndProcessJson(dataURL, function (raw_body) {
         var bodyJSON = JSON.parse(raw_body);
+        var dataJSON = bodyJSON['data'];
         _saveData(raw_body);
-        _saveImages(bodyJSON['data'])
+
+        var itemFilter = [
+            'Furor',
+            'Alacrity',
+            'Captain',
+            'Homeguard',
+            'Distortion',
+            'Totem',
+            'Lens',
+            'Scrying Orb',
+            'Farsight Orb',
+            'Ward',
+            'Biscuit',
+            'Potion'
+        ];
+
+        dataJSON = _filterItemsByMap(mapNumber, dataJSON);
+        dataJSON = _filterItemsByName(itemFilter, dataJSON);
+        _saveImages(dataJSON);
     });
 };
 
@@ -86,7 +105,6 @@ function _saveImages(dataJSON) {
 /**
  * Obtain locally stored champion data for all champions.
  *
- * @param mapNumber Input the map number here (for an example, Summoner's Rift is 1)
  * @param callback
  */
 exports.getData = function getData(mapNumber, callback) {
@@ -104,7 +122,23 @@ exports.getData = function getData(mapNumber, callback) {
             console.log("Parsing local champion static data...");
             dataJSON = JSON.parse(file_data)['data'];
 
+            var itemFilter = [
+                'Furor',
+                'Alacrity',
+                'Captain',
+                'Homeguard',
+                'Distortion',
+                'Totem',
+                'Lens',
+                'Scrying Orb',
+                'Farsight Orb',
+                'Ward',
+                'Biscuit',
+                'Potion'
+            ];
+
             dataJSON = _filterItemsByMap(mapNumber, dataJSON);
+            dataJSON = _filterItemsByName(itemFilter, dataJSON);
 
             callback(dataJSON);
         }
@@ -127,6 +161,25 @@ function _filterItemsByMap(mapNumber, itemList) {
     }
 
     return itemList;
+}
+
+function _filterItemsByName(blacklist, itemList) {
+    var itemId;
+    var item;
+
+    for (itemId in itemList) {
+        if (itemList.hasOwnProperty(itemId)) {
+            item = itemList[itemId];
+
+            for (var i = 0; i < blacklist.length; ++i) {
+                if (item['name'].indexOf(blacklist[i]) !== -1) {
+                    delete itemList[itemId];
+                }
+            }
+        }
+    }
+
+    return itemList
 }
 
 /**
