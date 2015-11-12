@@ -23,6 +23,7 @@ function _errorMessage(dataURL) {
  */
 exports.retrieveAndProcessJson = function retrieveAndProcessJson(dataURL, callback) {
     "use strict";
+
     request(dataURL, function (req_err, req_res) {
         // Try to parse the JSON.
         try {
@@ -55,6 +56,7 @@ exports.retrieveAndProcessJson = function retrieveAndProcessJson(dataURL, callba
 exports.retrieveAndProcessImage = function retrieveAndProcessImage(imageURL, callback) {
     "use strict";
     request(imageURL, {encoding: 'binary'}, function (req_err, req_res) {
+
         // Extract the image name by looking at the very end of the path.
         var pathArray = (imageURL).split('/');
         var imageName = pathArray[pathArray.length - 1];

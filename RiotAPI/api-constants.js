@@ -25,5 +25,5 @@ module.exports = {
     champThumbnailPathJade: '/' + imagePath + 'champions/',
     // Item thumbnail paths.
     itemThumbnailPath: './public/' + imagePath + 'items/',
-    itemThumbnailPathJade: '/' + imagePath + + 'item/'
+    itemThumbnailPathJade: '/' + imagePath + 'items/'
 };

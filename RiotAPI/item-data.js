@@ -38,6 +38,13 @@ function _saveData(rawData) {
     });
 }
 
+/**
+ * Based on the dataJSON input, obtain the images from Data Dragon and save them locally to
+ * make retrieval simpler in the future.
+ *
+ * @param dataJSON
+ * @private
+ */
 function _saveImages(dataJSON) {
     var filePath;
     var itemKey;
@@ -63,8 +70,7 @@ function _saveImages(dataJSON) {
             fileFuncs.retrieveAndProcessImage(imageURL, function (fileName, image) {
                 filePath = api_constants.itemThumbnailPath + fileName;
 
-                // Use 'wx' so it doesn't write if it already exists. Minor optimization.
-                fs.writeFile(filePath, image, { encoding: 'binary', flag: 'wx' }, function (err) {
+                fs.writeFile(filePath, image, { encoding: 'binary' }, function (err) {
                     if (err) {
                         console.log("\t" + fileName + " already exists.");
                         return;
@@ -74,7 +80,93 @@ function _saveImages(dataJSON) {
                 })
             });
         }
-
-
     }
 }
+
+/**
+ * Obtain locally stored champion data for all champions.
+ *
+ * @param mapNumber Input the map number here (for an example, Summoner's Rift is 1)
+ * @param callback
+ */
+exports.getData = function getData(mapNumber, callback) {
+    "use strict";
+
+    // Where the local copy of the API should be stored.
+    var filePath = api_constants.jsonFilePath + 'itemData.json';
+
+    // Must parse the data as a JSON object, and these variables will store them as such.
+    var dataJSON;
+
+    fs.readFile(filePath, function (file_err, file_data) {
+        // Parse the file and obtain the JSON only if the file is valid.p
+        if (file_data !== undefined) {
+            console.log("Parsing local champion static data...");
+            dataJSON = JSON.parse(file_data)['data'];
+
+            dataJSON = _filterItemsByMap(mapNumber, dataJSON);
+
+            callback(dataJSON);
+        }
+    });
+};
+
+function _filterItemsByMap(mapNumber, itemList) {
+    var itemId;
+    var item;
+
+    for (itemId in itemList) {
+        if (itemList.hasOwnProperty(itemId)) {
+            item = itemList[itemId];
+
+            // Check map number here. If it's not available, remove that item.
+            if (!item['maps'][mapNumber]) {
+                delete itemList[itemId];
+            }
+        }
+    }
+
+    return itemList;
+}
+
+/**
+ * Allow callback on a specific item number.
+ *
+ * @param itemNumber
+ * @param callback
+ */
+exports.getItemData = function getItemData(itemNumber, callback) {
+    "use strict";
+    this.getData(function (championList) {
+        callback(championList[itemNumber]);
+    });
+};
+
+/**
+ * Get an array of SORTED paths to thumbnail images for each champion. This is primarily for jade.
+ *
+ * @param callback
+ */
+exports.getThumbnailPathsForJade = function getThumbnailPathsForJade(callback) {
+    var item;
+    var totalItem;
+    var pathsArray = [];
+
+    this.getData(function (itemList) {
+        // Save length of championList so we know when pathsArray is complete.
+        totalItem = Object.keys(itemList).length;
+
+        for (item in itemList) {
+            if (itemList.hasOwnProperty(item)) {
+                // The keys in championList are already formatted so no need to process.
+                pathsArray.push(api_constants.champThumbnailPathJade + item + '.png');
+
+                // If all champions have been accounted for, continue to the next step.
+                if (pathsArray.length === totalItem) {
+                    // Sort it alphabetically to achieve consistency.
+                    callback(pathsArray.sort());
+                }
+            }
+        }
+    });
+};

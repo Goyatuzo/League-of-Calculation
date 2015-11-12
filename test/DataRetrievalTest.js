@@ -6,6 +6,7 @@
 
 var chai = require('chai');
 var ChampionData = require('../RiotAPI/champion-data.js');
+var ItemData = require('../RiotAPI/item-data.js');
 var it = require('mocha/lib/mocha.js').it;
 var describe = require('mocha/lib/mocha.js').describe;
 var expect = chai.expect;
@@ -35,16 +36,6 @@ describe("Champion Data", function() {
             done();
         });
 
-    });
-
-    it('Get Ekko-specific data.', function (done) {
-        ChampionData.getChampionData('Ekko', function (data) {
-
-            // data should now be Ekko's entry.
-            data.name.should.equal('Ekko');
-
-            done();
-        });
     });
 });
 
@@ -98,42 +89,13 @@ describe('Test for champion names being properly changed.', function () {
     })
 });
 
-///**
-// * Since I use this test a lot in the image section, just made a method for it.
-// *
-// * @param champion_name
-// * @param done
-// */
-//function imageTest(champion_name, done) {
-//    champion.getThumbnailOf(champion_name, function (data) {
-//        data.should.not.equal(undefined);
-//
-//        done();
-//    })
-//}
-//
-//describe("Champion Thumbnail Images", function() {
-//    it('Jarvan IV (Test spaces)', function (done) {
-//        imageTest("Jarvan IV", done);
-//    });
-//    it ("Kog'Maw (Test apostrophe)", function (done) {
-//        imageTest("Kog'Maw", done);
-//    });
-//
-//    it ("Dr. Mundo (Test space and period)", function (done) {
-//        imageTest("Dr. Mundo", done);
-//    });
-//
-//    it ("All thumbnails", function (done) {
-//        this.timeout(100000);
-//        champion.getAllThumbnails(function (result) {
-//            // It shouldn't be undefined.
-//            result.should.not.equal(undefined);
-//
-//            // Nor should its length be 0.
-//            (result.length).should.not.equal(0);
-//
-//            done();
-//        });
-//    });
-//});
+describe("item-data.js", function() {
+    it("Obtain data JSON", function (done) {
+        ItemData.getData(11, function (itemList) {
+            itemList['1001']['name'].should.be.equal('Boots of Speed');
+            expect(itemList['3180']).to.be.undefined;
+
+            done();
+        });
+    });
+});

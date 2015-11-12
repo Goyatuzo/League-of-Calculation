@@ -82,7 +82,7 @@ function _saveThumbnailsFromData(dataJSON) {
             fileFuncs.retrieveAndProcessImage(thumbnailURL, function (fileName, image) {
                 filePath = api_constants.champThumbnailPath + fileName;
 
-                fs.writeFile(filePath, image, { encoding: 'binary', flag: 'wx' }, function (err) {
+                fs.writeFile(filePath, image, { encoding: 'binary' }, function (err) {
                     if (err) {
                         console.log("\t" + fileName + " already exists.");
                         return;
@@ -117,23 +117,6 @@ exports.getData = function getData(callback) {
 
             callback(dataJSON['data']);
         }
-    });
-};
-
-/**
- * Return the entry of the champion specified by championName.
- *
- * @param championName
- * @param callback
- */
-exports.getChampionData = function getChampionData (championName, callback) {
-    "use strict";
-
-    // Make sure there are no symbols or white-spaces in the name.
-    var name = this.stripNonLetters(championName);
-
-    this.getData(function (championList) {
-        callback(championList[name]);
     });
 };
 

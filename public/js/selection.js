@@ -32,6 +32,6 @@ $(".championThumbnail").click(function () {
         enemyChampion = getChampionFromPath($(this)[0].currentSrc);
 
         // Now redirect.
-        window.location.replace('build/' + yourChampion + '/' + enemyChampion);
+        window.location.replace('sr/' + yourChampion + '/' + enemyChampion);
     }
 });
