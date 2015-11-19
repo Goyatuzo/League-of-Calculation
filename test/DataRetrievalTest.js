@@ -98,4 +98,77 @@ describe("item-data.js", function() {
             done();
         });
     });
+
+    it("getItemData", function (done) {
+        ItemData.getItemData(1001, function (data) {
+
+            expect(data).to.not.equal(undefined);
+            done();
+        });
+    });
+
+    it("boots stats", function (done) {
+        ItemData.getItemStats(1001, function (stats) {
+            expect(stats['move']).to.be.undefined;
+            done();
+        });
+    });
+
+    it("infinity edge stats", function (done ) {
+        ItemData.getItemStats(3031, function (stats) {
+            expect(stats['crit']).to.exist;
+            expect(stats['critincrease']).to.exist;
+            done();
+        });
+    });
+
+    it("bork stats", function (done) {
+        ItemData.getItemStats(3153, function (stats) {
+            expect(stats['onhitpercentphysical']).to.exist;
+
+            done();
+        });
+    });
+
+    it("randuin's stats", function (done) {
+        ItemData.getItemStats(3143, function (stats) {
+            expect(stats).to.exist;
+
+            done();
+        });
+    });
+
+    it("void staff stats", function (done) {
+        ItemData.getItemStats(3135, function (stats) {
+            expect(stats['magicpen']).to.exist;
+
+            done();
+        });
+    });
+
+    it("abyssal scepter stats", function (done) {
+        ItemData.getItemStats(3001, function (stats) {
+            expect(stats['magicpen']).to.exist;
+
+            done();
+        });
+    });
+
+    it("muramana stats", function (done) {
+        ItemData.getItemStats(3042, function (stats) {
+            expect(stats['manatoad']).to.exist;
+
+            expect(stats['mana']).to.exist;
+
+            done();
+        });
+    });
+
+    it("dominiks stats", function (done) {
+        ItemData.getItemStats(3036, function (stats) {
+            expect(stats['bonusarmorpen']).to.exist;
+
+            done();
+        });
+    });
 });

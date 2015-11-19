@@ -8,6 +8,11 @@ var api_constants = require('./api-constants');
 var mkdirp = require('mkdirp');
 var fileFuncs = require('./file-functions');
 
+/**
+ * Request information from RIOT.
+ *
+ * @param mapNumber
+ */
 exports.requestFromRiot = function requestFromRiot (mapNumber) {
     console.log("Initializing item data retrieval.");
 
@@ -105,6 +110,7 @@ function _saveImages(dataJSON) {
 /**
  * Obtain locally stored champion data for all champions.
  *
+ * @param mapNumber
  * @param callback
  */
 exports.getData = function getData(mapNumber, callback) {
@@ -190,10 +196,103 @@ function _filterItemsByName(blacklist, itemList) {
  */
 exports.getItemData = function getItemData(itemNumber, callback) {
     "use strict";
-    this.getData(function (championList) {
+    this.getData(11, function (championList) {
         callback(championList[itemNumber]);
     });
 };
+
+/**
+ * Given an item number, query the item data set and parse the data
+ * @param itemNumber
+ * @param callback
+ */
+exports.getItemStats = function getItemStats(itemNumber, callback) {
+    var parsed = {};
+
+    var stats;
+
+    this.getItemData(itemNumber, function (data) {
+        console.log(data);
+
+        stats = data['stats'];
+
+        // Set identifying information here.
+        parsed['id'] = itemNumber;
+        parsed['name'] = data['name'];
+
+        // Obtain damage stats.
+        parsed['ad'] = stats['FlatPhysicalDamageMod'];
+        parsed['as'] = stats['PercentAttackSpeedMod'];
+        parsed['ap'] = stats['FlatMagicDamageMod'];
+
+        // Damage modifiers.
+        parsed['lifesteal'] = stats['PercentLifeStealMod'];
+        parsed['crit'] = stats['FlatCritChanceMod'];
+
+        // Defense stats
+        parsed['health'] = stats['FlatHPPoolMod'];
+        parsed['armor'] = stats['FlatArmorMod'];
+        parsed['mana'] = stats['FlatMPPoolMod'];
+
+        // Parse for any remaining passives.
+        parsed = _specialItems(data, parsed);
+
+        callback(parsed);
+    });
+};
+
+function _specialItems(itemData, parsed) {
+    var name = itemData['name'];
+    var effectOne;
+
+    // If the item has effects, parse it. Otherwise just return.
+    if (itemData['effect']) {
+        effectOne = itemData['effect']['Effect1Amount'];
+    } else {
+        // If effects weren't found, there are some items that don't have it.
+        if (name === "Muramana") {
+            parsed['manatoad'] = .03;
+
+        } else if (name === "Muramane") {
+            parsed['manatoad'] = .02;
+
+        }
+        return parsed;
+    }
+
+    if (name === 'Infinity Edge') {
+        parsed['critincrease'] = effectOne;
+
+    } else if (name === "Blade of the Ruined King") {
+        parsed['onhitpercentphysical'] = effectOne;
+
+    } else if (name === 'Void Staff') {
+        parsed['magicpen'] = effectOne;
+
+    } else if (name === "Abyssal Scepter") {
+        // Since it's stored as a negative value, swap the sign.
+        var val = effectOne.toString();
+        parsed['magicpen'] = -val;
+
+    } else if (name.indexOf("Devourer") > -1) {
+
+    } else if (itemData['colloq'] === "lw") {
+        console.log("armor pen");
+        parsed['bonusarmorpen'] = effectOne;
+
+    } else if (name === "Sheen" || name === "Trinity Force" || name === "Runeglaive" || name === "Lich Bane" || name === "Iceborn Gauntlet") {
+        parsed['spellblade'] = effectOne;
+
+    } else if (name === "Youmuu\'s Ghostblade" || name === "Serrated Dirk") {
+        parsed['armorpen'] = effectOne;
+
+    } else if (name === "Black Cleaver") {
+        parsed['armorpen'] = .3;
+
+    }
+
+    return parsed;
+}
 
 /**
  * Get an array of SORTED paths to thumbnail images for each champion. This is primarily for jade.
