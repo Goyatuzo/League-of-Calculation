@@ -107,6 +107,13 @@ describe("item-data.js", function() {
         });
     });
 
+    it("athene's", function (done) {
+        ItemData.getItemStats(3174, function (stats) {
+            expect(stats).to.exist;
+            done();
+        });
+    });
+
     it("boots stats", function (done) {
         ItemData.getItemStats(1001, function (stats) {
             expect(stats['move']).to.be.undefined;

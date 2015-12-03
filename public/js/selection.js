@@ -2,7 +2,7 @@
  * @author Yuto Otaguro
  */
 
-// When a champion thumnbnail is clicked, that is the first champion that was selected by the user.
+// When a champion thumbnail is clicked, that is the first champion that was selected by the user.
 var yourChampion;
 var enemyChampion;
 
@@ -32,6 +32,6 @@ $(".championThumbnail").click(function () {
         enemyChampion = getChampionFromPath($(this)[0].currentSrc);
 
         // Now redirect.
-        window.location.replace('sr/' + yourChampion + '/' + enemyChampion);
+        window.location.href = 'sr/' + yourChampion + '/' + enemyChampion;
     }
 });

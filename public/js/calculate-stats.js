@@ -1,8 +1,8 @@
 // var youData = Your champion's data.
 // var enemyData = Enemy champion's data.
 
-var youLevel;
-var enemyLevel;
+var youLevel = 1;
+var enemyLevel = 1;
 
 /**
  * When some information pertaining the championInformation tag changes, use that
@@ -19,19 +19,148 @@ function updateStatsDisplay($player, data, level) {
     // The following points to the stat cell in the corresponding player div.
     var $adCell = $player.find('.ad');
     var $asCell = $player.find('.as');
-    var $apCell = $player.find('.ap');
+    var $critCell = $player.find('.crit');
 
     var $armorCell = $player.find('.armor');
     var $mrCell = $player.find('.mr');
 
     var stats = data['stats'];
+    var $items = $player.find(".item-set");
 
-    $adCell.text(getChampionAttackDamage(stats, level));
-    $asCell.text(getChampionAttackSpeed(stats, level));
+    // List of items.
+    var items = getItemList($items);
+
+    var totalAd = parseFloat(getChampionAttackDamage(stats, level)) + parseFloat(getItemsTotalAd(items));
+    var totalAs = parseFloat(getChampionAttackSpeed(stats, level)) * (parseFloat(getItemsAttackSpeed(items)) + 1.0).toFixed(3);
+    var totalArmor = parseFloat(getChampionArmor(stats, level)) + parseFloat(getItemsTotalArmor(items));
+    var totalMr = parseFloat(getItemsTotalMR(items));
+
+    var critChance = parseFloat(getItemsTotalCrit(items));
+
+    $adCell.text(totalAd);
+    $asCell.text(totalAs);
+    $critCell.text(critChance * 100 + "%");
+
     // AP starts from 0 and only grows from item.
-    $armorCell.text(getChampionArmor(stats, level));
-    $mrCell.text(getChampionMR(stats, level));
+    $armorCell.text(totalArmor);
+    $mrCell.text(totalMr);
+
+    simulateDamage(totalAd, totalAs, critChance, 0, totalArmor, totalMr);
 }
+
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+// Item-related functions
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+
+/**
+ * From the Item URL, extrapolate only the item number.
+ *
+ * @param URL
+ * @returns {*}
+ */
+function getItemNumber(URL) {
+    "use strict";
+    // First split by /
+    var components = URL.split("/");
+
+    // Then we only care about the last part of the URL.
+    components = components[components.length - 1];
+
+    // Now take away the file extension and get the filename, which is also the item number.
+    components = components.split(".");
+    return components[0];
+}
+
+/**
+ * Given the div to the item, obtain the item number and return the stats.
+ *
+ * @param $itemDiv Reference to the div containing the item.
+ */
+function getItemData($itemDiv) {
+    "use strict";
+    // Obtain itemURL
+    var itemURL = $itemDiv.children("img").attr("src");
+
+    if (itemURL === undefined) {
+        return undefined;
+    }
+
+    // Obtain item information.
+    return itemData[getItemNumber(itemURL)];
+}
+
+function getItemList($setDiv) {
+    "use strict";
+
+    // List of items.
+    var items = [];
+    items.push(getItemData($setDiv.find("#item-one")));
+    items.push(getItemData($setDiv.find("#item-two")));
+    items.push(getItemData($setDiv.find("#item-three")));
+    items.push(getItemData($setDiv.find("#item-four")));
+    items.push(getItemData($setDiv.find("#item-five")));
+    items.push(getItemData($setDiv.find("#item-six")));
+
+    return items;
+}
+
+function getItemsAttributeSum(itemSet, attribute) {
+    "use strict";
+
+    var attributeSum = 0;
+    var itemStats;
+
+    for (var i = 0; i < itemSet.length; ++i) {
+        if (itemSet[i]) {
+            itemStats = itemSet[i]['stats'];
+
+            // If the item has the desired attribute, add it to the sum.
+            if (itemStats[attribute]) {
+                attributeSum += itemStats[attribute];
+            }
+        }
+    }
+    return attributeSum;
+}
+
+
+function getItemsTotalAd(itemSet) {
+    "use strict";
+
+    return getItemsAttributeSum(itemSet, 'FlatPhysicalDamageMod');
+}
+
+function getItemsAttackSpeed(itemSet) {
+    "use strict";
+
+    return getItemsAttributeSum(itemSet, "PercentAttackSpeedMod");
+}
+
+function getItemsTotalCrit(itemSet) {
+    "use strict";
+
+    return getItemsAttributeSum(itemSet, "FlatCritChanceMod");
+}
+
+function getItemsTotalArmor(itemSet) {
+    "use strict";
+
+    return getItemsAttributeSum(itemSet, "FlatArmorMod").toFixed(3);
+}
+
+function getItemsTotalMR(itemSet) {
+    "use strict";
+
+    return getItemsAttributeSum(itemSet, "FlatSpellBlockMod").toFixed(3);
+}
+
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+// Champion base values.
+///////////////////////////////////////////////
+///////////////////////////////////////////////
 
 /**
  * Based on the input stats and the input level, calculate the champion's AD.
@@ -46,8 +175,11 @@ function getChampionAttackDamage(stats, level) {
     var baseAD = stats['attackdamage'];
     var adPerLevel = stats['attackdamageperlevel'];
 
+    // Level one has no growth.
+    level -= 1;
+
     // Round to the nearest hundredth.
-    return (baseAD + adPerLevel * level).toFixed(3);
+    return (baseAD + adPerLevel * (level)).toFixed(3);
 }
 
 /**
@@ -82,6 +214,9 @@ function getChampionArmor(stats, level) {
     var baseArmor = stats['armor'];
     var armorPerLevel = stats['armorperlevel'];
 
+    // Level 1 has no growth
+    level -= 1;
+
     return (baseArmor + level * armorPerLevel).toFixed(3);
 }
 
@@ -98,30 +233,48 @@ function getChampionMR(stats, level) {
     var baseMR = stats['spellblock'];
     var mrPerLevel = stats['spellblockperlevel'];
 
+    // Level 1 has no growth.
+    level -= 1;
+
     return (baseMR + level * mrPerLevel).toFixed(3);
 }
 
-// JS to enable the dropdown functionality for levels.
-$('.dropdown-toggle').dropdown();
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+// Simulation
+///////////////////////////////////////////////
+///////////////////////////////////////////////
 
-// If a champion's level was selected, change the Level text to the level that was chosen.
-$('.dropdown li a').click(function () {
+function simulateDamage(ad, as, crit, ap, armor, mr) {
     "use strict";
 
-    // The text that should be shown to the user.
-    var levelHtml = 'Level ' + $(this).text() + '<span class="caret"></span>';
-    var $player = $(this).closest('.championInformation');
-    var level = parseInt($(this).text());
+    var $adCalculation = $("#adCalculation");
 
-    // Check if your level was changed, and update the stats displayed.
-    if ($player.attr('id') === 'you') {
-        youLevel = level;
-        updateStatsDisplay($player, youData, level);
-    } else {
-        enemyLevel = level;
-        updateStatsDisplay($player, enemyData, level);
-    }
+    var numberOfAutos = attackCount(as, 1);
+    var simulateAd = numberOfAutos * ad * armorMultiplier(armor);
+    $adCalculation.text(simulateAd.toFixed(3));
+}
 
-    // Change the appropriate text to be "Level #"
-    $player.find('.dropdown-toggle').html(levelHtml);
-});
+/**
+ * Calculate the number of times the champion auto attacks.
+ *
+ * @param as
+ * @param seconds
+ * @returns {number}
+ */
+function attackCount(as, seconds) {
+    "use strict";
+
+    return as * seconds;
+}
+
+/**
+ * Obtain the damage multiplier reduced by armor through this calculation.
+ *
+ * @param armor
+ * @returns {number}
+ */
+function armorMultiplier(armor) {
+    "use strict";
+    return parseFloat(100.0 / (100.0 + armor));
+}

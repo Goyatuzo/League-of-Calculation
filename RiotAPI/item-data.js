@@ -11,36 +11,14 @@ var fileFuncs = require('./file-functions');
 /**
  * Request information from RIOT.
  *
- * @param mapNumber
  */
-exports.requestFromRiot = function requestFromRiot (mapNumber) {
+exports.requestFromRiot = function () {
     console.log("Initializing item data retrieval.");
 
     var dataURL = api_constants.itemURL + 'itemListData=all&api_key=' + api_constants.apiKey;
 
     fileFuncs.retrieveAndProcessJson(dataURL, function (raw_body) {
-        var bodyJSON = JSON.parse(raw_body);
-        var dataJSON = bodyJSON['data'];
         _saveData(raw_body);
-
-        var itemFilter = [
-            'Furor',
-            'Alacrity',
-            'Captain',
-            'Homeguard',
-            'Distortion',
-            'Totem',
-            'Lens',
-            'Scrying Orb',
-            'Farsight Orb',
-            'Ward',
-            'Biscuit',
-            'Potion'
-        ];
-
-        dataJSON = _filterItemsByMap(mapNumber, dataJSON);
-        dataJSON = _filterItemsByName(itemFilter, dataJSON);
-        _saveImages(dataJSON);
     });
 };
 
@@ -62,49 +40,23 @@ function _saveData(rawData) {
     });
 }
 
-/**
- * Based on the dataJSON input, obtain the images from Data Dragon and save them locally to
- * make retrieval simpler in the future.
- *
- * @param dataJSON
- * @private
- */
-function _saveImages(dataJSON) {
-    var filePath;
-    var itemKey;
+function _filterItemsByName(blacklist, itemList) {
+    var itemId;
     var item;
 
-    var imageURL;
-    var imageName;
+    for (itemId in itemList) {
+        if (itemList.hasOwnProperty(itemId)) {
+            item = itemList[itemId];
 
-    // Check to see the destination folder exists, and create if it doesn't.
-    fileFuncs.checkFolder(api_constants.itemThumbnailPath);
-
-    // For each item in the item JSON, save the thumbnail.
-    for (itemKey in dataJSON) {
-        if (dataJSON.hasOwnProperty(itemKey)) {
-            item = dataJSON[itemKey];
-
-            // The image are saved as #{id}.png
-            imageName = item['id'] + '.png';
-
-            imageURL = api_constants.itemThumbnailURL + imageName;
-
-            // Retrieve the file from the API.
-            fileFuncs.retrieveAndProcessImage(imageURL, function (fileName, image) {
-                filePath = api_constants.itemThumbnailPath + fileName;
-
-                fs.writeFile(filePath, image, { encoding: 'binary' }, function (err) {
-                    if (err) {
-                        console.log("\t" + fileName + " already exists.");
-                        return;
-                    }
-
-                    console.log("\tThumbnail " + fileName + " was saved.");
-                })
-            });
+            for (var i = 0; i < blacklist.length; ++i) {
+                if (item['name'].indexOf(blacklist[i]) !== -1) {
+                    delete itemList[itemId];
+                }
+            }
         }
     }
+
+    return itemList
 }
 
 /**
@@ -143,50 +95,12 @@ exports.getData = function getData(mapNumber, callback) {
                 'Potion'
             ];
 
-            dataJSON = _filterItemsByMap(mapNumber, dataJSON);
             dataJSON = _filterItemsByName(itemFilter, dataJSON);
 
             callback(dataJSON);
         }
     });
 };
-
-function _filterItemsByMap(mapNumber, itemList) {
-    var itemId;
-    var item;
-
-    for (itemId in itemList) {
-        if (itemList.hasOwnProperty(itemId)) {
-            item = itemList[itemId];
-
-            // Check map number here. If it's not available, remove that item.
-            if (!item['maps'][mapNumber]) {
-                delete itemList[itemId];
-            }
-        }
-    }
-
-    return itemList;
-}
-
-function _filterItemsByName(blacklist, itemList) {
-    var itemId;
-    var item;
-
-    for (itemId in itemList) {
-        if (itemList.hasOwnProperty(itemId)) {
-            item = itemList[itemId];
-
-            for (var i = 0; i < blacklist.length; ++i) {
-                if (item['name'].indexOf(blacklist[i]) !== -1) {
-                    delete itemList[itemId];
-                }
-            }
-        }
-    }
-
-    return itemList
-}
 
 /**
  * Allow callback on a specific item number.

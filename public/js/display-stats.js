@@ -35,7 +35,14 @@ $('.item-select').droppable({
     drop: function(event, ui) {
         "use strict";
         $(this).html($(ui.draggable).clone());
-        //$(this).droppable('option', 'accept', ui.draggable);
+
+        var $player = $(this).closest(".championInformation");
+
+        if ($player.attr('id') === 'you') {
+            updateStatsDisplay($player, youData, youLevel);
+        } else {
+            updateStatsDisplay($player, enemyData, enemyLevel);
+        }
     }
 });
 

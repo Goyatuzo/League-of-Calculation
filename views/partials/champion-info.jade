@@ -6,7 +6,7 @@
     span.
         #{champName}
     .dropdown
-        a(href="#", data-toggle="dropdown").dropdown-toggle Level #[span(class='caret')]
+        a(href="#", data-toggle="dropdown").dropdown-toggle Level 1 #[span(class='caret')]
         ul.dropdown-menu(role='menu', aria-labelledby='dropdownMenu')
             - for (var i = 1; i < 19; ++i) {
                 li #[a(href='#', tabindex='-1') #{i}]
@@ -26,6 +26,9 @@
                 tr
                     td Attack Speed
                     td(class='as')
+                tr
+                    td Critical Chance
+                    td(class='crit')
                 tr
                     td Ability Power
                     td(class='ap')
