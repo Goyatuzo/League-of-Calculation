@@ -26,9 +26,6 @@
     <Content Include="README.md" />
     <Compile Include="app.ts" />
     <Compile Include="RiotAPI\api-constants.js" />
-    <Compile Include="RiotAPI\champion-data.js" />
-    <Compile Include="RiotAPI\file-functions.js" />
-    <Compile Include="RiotAPI\item-data.js" />
     <Compile Include="routes\builds.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\tests.js" />
@@ -64,6 +61,7 @@
     <Folder Include="views\partials" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="RiotAPI\constants.ts" />
     <TypeScriptCompile Include="RiotAPI\endpoints\index.ts" />
     <TypeScriptCompile Include="RiotAPI\endpoints\items.ts" />
     <TypeScriptCompile Include="RiotAPI\interfaces\items.ts" />

@@ -1,13 +1,9 @@
 import * as express from 'express';
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-
-//var routes = require('./routes/index');
-//var builds = require('./routes/builds');
-//var tests = require('./routes/tests');
+import * as path from 'path';
+import * as favicon from 'serve-favicon';
+import * as logger from 'morgan';
+import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
 
 var app = express();
 
@@ -24,8 +20,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 import ItemStaticEndpoint from './RiotAPI/endpoints/items';
-
-ItemStaticEndpoint.getAllItems().then(answer => console.log(answer));
 
 //app.use('/', routes);
 //app.use('/tests', tests);

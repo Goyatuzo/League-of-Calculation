@@ -1,3 +1,7 @@
 ﻿export default class RiotApiEndpoint {
-    protected static baseStaticRoute: string = 'https://global.api.pvp.net/api/lol/static-data/na/v1.2/';
+    protected static basicStaticRoute(region: string): string {
+        return `https://global.api.pvp.net/api/lol/static-data/${region}/v1.2/`;
+    }
+
+    protected static dataDragonImageEndpoint(): string = 'http://ddragon.leagueoflegends.com/cdn/5.23.1/img/';
 }

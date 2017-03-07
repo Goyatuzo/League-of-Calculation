@@ -2,12 +2,11 @@
 
 import RiotApiEndpoint from './index';
 import { IItemListDto } from '../interfaces/items';
-
+import { API_KEY } from '../constants';
 
 export default class ItemStaticEndpoint extends RiotApiEndpoint {
-
-    public static getAllItems(): Promise<IItemListDto> {
-        return fetch(`${this.baseStaticRoute}item?api_key=b9a83979-c2a0-4007-9e07-f3a8e08e4f61`).then(response => {
+    public static getAllItems(region: string): Promise<IItemListDto> {
+        return fetch(`${this.basicStaticRoute(region)}item?api_key=${API_KEY}`).then(response => {
             return response.json() as Promise<IItemListDto>;
         });
     }
