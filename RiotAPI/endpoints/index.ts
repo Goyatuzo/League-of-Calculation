@@ -3,5 +3,5 @@
         return `https://global.api.pvp.net/api/lol/static-data/${region}/v1.2/`;
     }
 
-    protected static dataDragonImageEndpoint(): string = 'http://ddragon.leagueoflegends.com/cdn/5.23.1/img/';
+    protected static dataDragonImageEndpoint: string = 'http://ddragon.leagueoflegends.com/cdn/5.23.1/img/';
 }

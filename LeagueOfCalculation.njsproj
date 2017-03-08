@@ -26,14 +26,9 @@
     <Content Include="README.md" />
     <Compile Include="app.ts" />
     <Compile Include="RiotAPI\api-constants.js" />
-    <Compile Include="routes\builds.js" />
-    <Compile Include="routes\index.js" />
-    <Compile Include="routes\tests.js" />
     <Content Include="tsconfig.json" />
-    <Content Include="views\builds.jade" />
     <Content Include="views\error.jade" />
-    <Content Include="views\index.jade" />
-    <Content Include="views\tests.jade" />
+    <Content Include="views\index.pug" />
     <Compile Include="public\js\bootstrap.min.js" />
     <Compile Include="public\js\calculate-stats.js" />
     <Compile Include="public\js\display-stats.js" />
@@ -41,9 +36,7 @@
     <Compile Include="public\js\tests.js" />
     <Content Include="public\stylesheets\bootstrap.min.css" />
     <Content Include="public\stylesheets\style.css" />
-    <Content Include="views\partials\champion-info.jade" />
-    <Content Include="views\partials\layout.jade" />
-    <Content Include="views\partials\scripts.jade" />
+    <Content Include="views\partials\layout.pug" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin" />
@@ -65,6 +58,8 @@
     <TypeScriptCompile Include="RiotAPI\endpoints\index.ts" />
     <TypeScriptCompile Include="RiotAPI\endpoints\items.ts" />
     <TypeScriptCompile Include="RiotAPI\interfaces\items.ts" />
+    <TypeScriptCompile Include="routes\index.ts" />
+    <TypeScriptCompile Include="routes\route.ts" />
     <TypeScriptCompile Include="typings\globals\node\index.d.ts" />
     <TypeScriptCompile Include="typings\index.d.ts" />
   </ItemGroup>

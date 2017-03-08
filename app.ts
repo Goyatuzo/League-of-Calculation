@@ -1,59 +1,121 @@
-import * as express from 'express';
-import * as path from 'path';
-import * as favicon from 'serve-favicon';
-import * as logger from 'morgan';
-import * as cookieParser from 'cookie-parser';
-import * as bodyParser from 'body-parser';
+import * as bodyParser from "body-parser";
+import * as cookieParser from "cookie-parser";
+import * as express from "express";
+import * as logger from "morgan";
+import * as path from "path";
+import * as errorHandler from 'errorhandler';
+import * as methodOverride from 'method-override';
 
-var app = express();
+import { IndexRoute } from "./routes/index";
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+/**
+ * The server.
+ *
+ * @class Server
+ */
+export class Server {
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+    public app: express.Application;
 
-import ItemStaticEndpoint from './RiotAPI/endpoints/items';
+    /**
+     * Bootstrap the application.
+     *
+     * @class Server
+     * @method bootstrap
+     * @static
+     * @return {ng.auto.IInjectorService} Returns the newly created injector for this app.
+     */
+    public static bootstrap(): Server {
+        return new Server();
+    }
 
-//app.use('/', routes);
-//app.use('/tests', tests);
-//app.use('/sr', builds);
+    /**
+     * Constructor.
+     *
+     * @class Server
+     * @constructor
+     */
+    constructor() {
+        //create expressjs application
+        this.app = express();
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    (err as any).status = 404;
-    next(err);
-});
+        //configure application
+        this.config();
 
-// error handlers
+        //add routes
+        this.routes();
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err: any, req: express.Request, res: express.Response) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
+        //add api
+        this.api();
+    }
+
+    /**
+     * Create REST API routes
+     *
+     * @class Server
+     * @method api
+     */
+    public api() {
+        //empty for now
+    }
+
+    /**
+     * Configure application
+     *
+     * @class Server
+     * @method config
+     */
+    public config() {
+        //add static paths
+        this.app.use(express.static(path.join(__dirname, "public")));
+
+        //configure pug
+        this.app.set("views", path.join(__dirname, "views"));
+        this.app.set("view engine", "pug");
+
+        //mount logger
+        this.app.use(logger("dev"));
+
+        //mount json form parser
+        this.app.use(bodyParser.json());
+
+        //mount query string parser
+        this.app.use(bodyParser.urlencoded({
+            extended: true
+        }));
+
+        //mount cookie parker
+        this.app.use(cookieParser("SECRET_GOES_HERE"));
+
+        //mount override?
+        this.app.use(methodOverride());
+
+        // catch 404 and forward to error handler
+        this.app.use(function (err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
+            err.status = 404;
+            next(err);
         });
-    });
+
+        //error handling
+        this.app.use(errorHandler());
+    }
+
+    /**
+     * Create and return Router.
+     *
+     * @class Server
+     * @method config
+     * @return void
+     */
+    private routes() {
+        let router: express.Router;
+        router = express.Router();
+
+        //IndexRoute
+        IndexRoute.create(router);
+
+        //use router middleware
+        this.app.use(router);
+    }
+
 }
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err: any, req: express.Request, res: express.Response) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
-
-module.exports = app;
