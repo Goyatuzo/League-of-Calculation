@@ -29,13 +29,6 @@
     <Content Include="tsconfig.json" />
     <Content Include="views\error.jade" />
     <Content Include="views\index.pug" />
-    <Compile Include="public\js\bootstrap.min.js" />
-    <Compile Include="public\js\calculate-stats.js" />
-    <Compile Include="public\js\display-stats.js" />
-    <Compile Include="public\js\selection.js" />
-    <Compile Include="public\js\tests.js" />
-    <Content Include="public\stylesheets\bootstrap.min.css" />
-    <Content Include="public\stylesheets\style.css" />
     <Content Include="views\partials\layout.pug" />
   </ItemGroup>
   <ItemGroup>
