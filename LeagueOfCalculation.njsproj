@@ -52,6 +52,7 @@
     <TypeScriptCompile Include="RiotAPI\endpoints\items.ts" />
     <TypeScriptCompile Include="RiotAPI\interfaces\items.ts" />
     <TypeScriptCompile Include="routes\index.ts" />
+    <TypeScriptCompile Include="routes\items.ts" />
     <TypeScriptCompile Include="routes\route.ts" />
     <TypeScriptCompile Include="typings\globals\node\index.d.ts" />
     <TypeScriptCompile Include="typings\index.d.ts" />

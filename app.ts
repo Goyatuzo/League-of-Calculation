@@ -7,6 +7,7 @@ import * as errorHandler from 'errorhandler';
 import * as methodOverride from 'method-override';
 
 import { IndexRoute } from "./routes/index";
+import { ItemsRoute } from './routes/items';
 
 /**
  * The server.
@@ -112,7 +113,8 @@ export class Server {
         router = express.Router();
 
         //IndexRoute
-        IndexRoute.create(router);
+        IndexRoute.create(router, "/");
+        ItemsRoute.create(router, "/items");
 
         //use router middleware
         this.app.use(router);

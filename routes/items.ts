@@ -7,7 +7,7 @@ import { BaseRoute } from "./route";
  *
  * @class User
  */
-export class IndexRoute extends BaseRoute {
+export class ItemsRoute extends BaseRoute {
 
     /**
      * Create the routes.
@@ -18,11 +18,11 @@ export class IndexRoute extends BaseRoute {
      */
     public static create(router: Router, baseRoute: string) {
         //log
-        console.log("[IndexRoute::create] Creating index route.");
+        console.log("[ItemsRoute::create] Creating items route.");
 
         //add home page route
         router.get(baseRoute, (req: Request, res: Response, next: NextFunction) => {
-            new IndexRoute().index(req, res, next);
+            new ItemsRoute().index(req, res, next);
         });
     }
 
@@ -47,7 +47,7 @@ export class IndexRoute extends BaseRoute {
      */
     public index(req: Request, res: Response, next: NextFunction) {
         //set custom title
-        this.title = "Home | Tour of Heros";
+        this.title = "Item Listing";
 
         //set message
         let options: Object = {

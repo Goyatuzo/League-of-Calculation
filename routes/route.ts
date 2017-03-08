@@ -1,4 +1,4 @@
-﻿import { NextFunction, Request, Response } from "express";
+﻿import { NextFunction, Request, Response, Router } from "express";
 
 /**
  * Constructor
@@ -11,6 +11,15 @@ export class BaseRoute {
 
     private scripts: string[];
 
+
+    /**
+     * Create the routes.
+     *
+     * @class IndexRoute
+     * @method create
+     * @static
+     */
+    public static create(router: Router, baseRoute: string) { }
 
     /**
      * Constructor
