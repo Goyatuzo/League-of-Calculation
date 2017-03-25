@@ -1,60 +1,11 @@
-﻿import { NextFunction, Request, Response, Router } from "express";
-import { BaseRoute } from "./route";
-
-
-/**
- * / route
- *
- * @class User
+﻿/*
+ * GET home page.
  */
-export class IndexRoute extends BaseRoute {
+import express = require('express');
+const router = express.Router();
 
-    /**
-     * Create the routes.
-     *
-     * @class IndexRoute
-     * @method create
-     * @static
-     */
-    public static create(router: Router, baseRoute: string) {
-        //log
-        console.log("[IndexRoute::create] Creating index route.");
+router.get('/', (req: express.Request, res: express.Response) => {
+    res.render('index', { title: 'Express' });
+});
 
-        //add home page route
-        router.get(baseRoute, (req: Request, res: Response, next: NextFunction) => {
-            new IndexRoute().index(req, res, next);
-        });
-    }
-
-    /**
-     * Constructor
-     *
-     * @class IndexRoute
-     * @constructor
-     */
-    constructor() {
-        super();
-    }
-
-    /**
-     * The home page route.
-     *
-     * @class IndexRoute
-     * @method index
-     * @param req {Request} The express Request object.
-     * @param res {Response} The express Response object.
-     * @next {NextFunction} Execute the next method.
-     */
-    public index(req: Request, res: Response, next: NextFunction) {
-        //set custom title
-        this.title = "Home | Tour of Heros";
-
-        //set message
-        let options: Object = {
-            "message": "Welcome to the Tour of Heros"
-        };
-
-        //render template
-        this.render(req, res, "index", options);
-    }
-}
+export default router;

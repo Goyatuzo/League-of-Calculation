@@ -27,8 +27,11 @@
     <Compile Include="app.ts" />
     <Compile Include="RiotAPI\api-constants.js" />
     <Content Include="tsconfig.json" />
-    <Content Include="views\error.jade" />
+    <Content Include="views\error.pug" />
     <Content Include="views\index.pug" />
+    <Content Include="views\items.pug">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="views\partials\layout.pug" />
   </ItemGroup>
   <ItemGroup>
@@ -53,7 +56,6 @@
     <TypeScriptCompile Include="RiotAPI\interfaces\items.ts" />
     <TypeScriptCompile Include="routes\index.ts" />
     <TypeScriptCompile Include="routes\items.ts" />
-    <TypeScriptCompile Include="routes\route.ts" />
     <TypeScriptCompile Include="typings\globals\node\index.d.ts" />
     <TypeScriptCompile Include="typings\index.d.ts" />
   </ItemGroup>

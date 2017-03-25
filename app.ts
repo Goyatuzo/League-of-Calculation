@@ -1,123 +1,50 @@
-import * as bodyParser from "body-parser";
-import * as cookieParser from "cookie-parser";
-import * as express from "express";
-import * as logger from "morgan";
-import * as path from "path";
-import * as errorHandler from 'errorhandler';
-import * as methodOverride from 'method-override';
+import express = require('express');
+import path = require('path');
 
-import { IndexRoute } from "./routes/index";
-import { ItemsRoute } from './routes/items';
+import routes from './routes/index';
+import items from './routes/items';
 
-/**
- * The server.
- *
- * @class Server
- */
-export class Server {
+var app = express();
 
-    public app: express.Application;
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
-    /**
-     * Bootstrap the application.
-     *
-     * @class Server
-     * @method bootstrap
-     * @static
-     * @return {ng.auto.IInjectorService} Returns the newly created injector for this app.
-     */
-    public static bootstrap(): Server {
-        return new Server();
-    }
+app.use(express.static(path.join(__dirname, 'public')));
 
-    /**
-     * Constructor.
-     *
-     * @class Server
-     * @constructor
-     */
-    constructor() {
-        //create expressjs application
-        this.app = express();
+app.use('/', routes);
+app.use('/items', items);
 
-        //configure application
-        this.config();
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err['status'] = 404;
+    next(err);
+});
 
-        //add routes
-        this.routes();
+// error handlers
 
-        //add api
-        this.api();
-    }
-
-    /**
-     * Create REST API routes
-     *
-     * @class Server
-     * @method api
-     */
-    public api() {
-        //empty for now
-    }
-
-    /**
-     * Configure application
-     *
-     * @class Server
-     * @method config
-     */
-    public config() {
-        //add static paths
-        this.app.use(express.static(path.join(__dirname, "public")));
-
-        //configure pug
-        this.app.set("views", path.join(__dirname, "views"));
-        this.app.set("view engine", "pug");
-
-        //mount logger
-        this.app.use(logger("dev"));
-
-        //mount json form parser
-        this.app.use(bodyParser.json());
-
-        //mount query string parser
-        this.app.use(bodyParser.urlencoded({
-            extended: true
-        }));
-
-        //mount cookie parker
-        this.app.use(cookieParser("SECRET_GOES_HERE"));
-
-        //mount override?
-        this.app.use(methodOverride());
-
-        // catch 404 and forward to error handler
-        this.app.use(function (err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
-            err.status = 404;
-            next(err);
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use((err: any, req, res, next) => {
+        res.status(err['status'] || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
         });
-
-        //error handling
-        this.app.use(errorHandler());
-    }
-
-    /**
-     * Create and return Router.
-     *
-     * @class Server
-     * @method config
-     * @return void
-     */
-    private routes() {
-        let router: express.Router;
-        router = express.Router();
-
-        //IndexRoute
-        IndexRoute.create(router, "/");
-        ItemsRoute.create(router, "/items");
-
-        //use router middleware
-        this.app.use(router);
-    }
-
+    });
 }
+
+// production error handler
+// no stacktraces leaked to user
+app.use((err: any, req, res, next) => {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+
+
+module.exports = app;
