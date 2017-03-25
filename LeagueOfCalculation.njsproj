@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin" />
+    <Folder Include="server-tests\" />
     <Folder Include="public" />
     <Folder Include="public\js" />
     <Folder Include="public\stylesheets" />
